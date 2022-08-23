@@ -18,4 +18,4 @@ def timestamp():
 
 env = jinja2.Environment(loader=jinja2.FileSystemLoader('templates'))
 tmpl = env.get_template('request.xml.jinja2').render(payload_id=payload_id(), timestamp=timestamp())
-
+print(tmpl)
