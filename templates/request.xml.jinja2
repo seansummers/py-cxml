@@ -1,6 +1,17 @@
+{#
+Basic request.xml document requires:
+- cxml with attributes for:
+  - xml:lang (optional)
+  - payload_id
+  - timestamp
+-#}
 <?xml version='1.0' encoding='UTF-8'?>
 <!DOCTYPE cXML SYSTEM "http://xml.cxml.org/schemas/cXML/1.2.014/cXML.dtd">
-<cXML{{ cxml | xmlattr }}>
+<cXML{{ {
+  'xml:lang': cxml['xml:lang'] | default('en-US'),
+  'payload_id': cxml['payload_id'],
+  'timestamp': cxml['timestamp']
+} | xmlattr }}>
  <Header>{{ header }}</Header>
  <Request>{{ request }}</Request>
 </cXML>

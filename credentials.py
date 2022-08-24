@@ -1,4 +1,5 @@
 import base64
+import contextlib
 import ctypes
 import datetime
 import hashlib
@@ -9,9 +10,13 @@ import pydantic
 
 
 CredentialMacTemplate = jinja2.Template(
-    '<CredentialMac type="FromSenderCredentials" algorithm="HMAC-SHA1-96"'
-    "{{dict(creationDate=credential_mac.creationDate, expirationDate=credential_mac.expirationDate)|xmlattr}}"
-    ">{{credential_mac.mac()}}</CredentialMac>"
+    """<CredentialMac{{ { 
+  'type': credential_mac.type | default("FromSenderCredentials"),
+  'algorithm': credential_mac.algorithm | default("HMAC-SHA1-96"),
+  'creationDate': credential_mac.creationDate,
+  'expirationDate': credential_mac.expirationDate,
+} | xmlattr }}>{{ credential_mac.mac() }}</CredentialMac>
+"""
 )
 
 
@@ -47,7 +52,8 @@ class CredentialMac(pydantic.BaseModel):
         self,
         password: str = "abracadabra",
     ) -> str:
-        password = password if isinstance(password, bytes) else password.encode("utf8")
+        with contextlib.suppress(AttributeError):
+            password = password.encode("utf8")
         digest = hmac.new(password, digestmod=hashlib.sha1)
         for part in (
             self.fromDomain,

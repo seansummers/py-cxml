@@ -24,7 +24,11 @@ def _timestamp() -> str:
 RequestTemplate = jinja2.Template(
     """<?xml version='1.0' encoding='UTF-8'?>
 <!DOCTYPE cXML SYSTEM "http://xml.cxml.org/schemas/cXML/1.2.014/cXML.dtd">
-<cXML{{ cxml | xmlattr }}>
+<cXML{{ {
+  'xml:lang': cxml['xml:lang'] | default('en-US'),
+  'payload_id': cxml['payload_id'],
+  'timestamp': cxml['timestamp']
+} | xmlattr }}>
  <Header>{{ header }}</Header>
  <Request>{{ request }}</Request>
 </cXML>
@@ -40,7 +44,6 @@ def render(
     request: Any = None,
 ):
     cxml = {
-        "xml:lang": "en-US",
         "payload_id": payload_id if payload_id else _payload_id(),
         "timestamp": timestamp if timestamp else _timestamp(),
         "header": header,
