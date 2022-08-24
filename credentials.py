@@ -4,6 +4,7 @@ import ctypes
 import datetime
 import hashlib
 import hmac
+import operator
 
 import jinja2
 import pydantic
@@ -18,6 +19,21 @@ CredentialMacTemplate = jinja2.Template(
 } | xmlattr }}>{{ credential_mac.mac() }}</CredentialMac>
 """
 )
+
+
+def get_hmac_values(
+    obj,
+    parts=(
+        "fromDomain",
+        "fromIdentity",
+        "senderDomain",
+        "senderIdentity",
+        "creationDate",
+        "expirationDate",
+    ),
+):
+    for value in operator.attrgetter(*parts)(obj):
+        yield ctypes.create_string_buffer(value.encode("utf8"))
 
 
 class CredentialMac(pydantic.BaseModel):
@@ -54,17 +70,8 @@ class CredentialMac(pydantic.BaseModel):
     ) -> str:
         with contextlib.suppress(AttributeError):
             password = password.encode("utf8")
-        digest = hmac.new(password, digestmod=hashlib.sha1)
-        for part in (
-            self.fromDomain,
-            self.fromIdentity,
-            self.senderDomain,
-            self.senderIdentity,
-            self.creationDate,
-            self.expirationDate,
-        ):
-            digest.update(ctypes.create_string_buffer(part.encode("utf8")))
-        return base64.b64encode(digest.digest()[0:12]).decode("utf8")
+        digest = hmac.digest(password, b"".join(get_hmac_values(self)), hashlib.sha1)
+        return base64.b64encode(digest[0:12]).decode("utf8")
 
     def xml(
         self,
