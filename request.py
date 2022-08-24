@@ -2,7 +2,6 @@ import datetime
 import os
 import random
 import socket
-
 from typing import Any
 
 import jinja2
@@ -21,6 +20,7 @@ def _timestamp() -> str:
     return datetime.datetime.utcnow().isoformat(timespec="minutes")
 
 
+# noinspection HttpUrlsUsage
 RequestTemplate = jinja2.Template(
     """<?xml version='1.0' encoding='UTF-8'?>
 <!DOCTYPE cXML SYSTEM "http://xml.cxml.org/schemas/cXML/1.2.014/cXML.dtd">

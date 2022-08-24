@@ -4,6 +4,7 @@ import unittest
 from credentials import CredentialMac
 
 
+# noinspection SpellCheckingInspection
 class TestCredentialMac(unittest.TestCase):
     def test_mac(self):
         credential_mac = CredentialMac(
@@ -37,7 +38,9 @@ class TestCredentialMac(unittest.TestCase):
         )
         self.assertEqual(
             credential_mac.xml(),
-            '<CredentialMac type="FromSenderCredentials" algorithm="HMAC-SHA1-96" creationDate="2003-01-15T08:42:46-08:00" expirationDate="2003-01-15T11:42:46-08:00">cR6Jpz58nriXERDN</CredentialMac>',
+            '<CredentialMac type="FromSenderCredentials" algorithm="HMAC-SHA1-96" '
+            'creationDate="2003-01-15T08:42:46-08:00" '
+            'expirationDate="2003-01-15T11:42:46-08:00">cR6Jpz58nriXERDN</CredentialMac>'
         )
 
 

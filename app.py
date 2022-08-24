@@ -1,13 +1,12 @@
 import importlib_resources
 import jinja2
-import pydantic
 
 import request
-
 from credentials import CredentialMac
 
 a = importlib_resources.files("templates")
 
+# noinspection PyProtectedMember
 ENV = jinja2.Environment(
     loader=jinja2.FileSystemLoader(importlib_resources.files("templates")._paths[0])
 )
