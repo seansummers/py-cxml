@@ -1,1 +1,3 @@
+importlib_resources
 jinja2
+pydantic
