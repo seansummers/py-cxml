@@ -1,22 +1,12 @@
-import base64
-import ctypes
-import datetime
-import hashlib
-import hmac
-import os
-import random
-import socket
-import struct
-
 import importlib_resources
 import jinja2
 import pydantic
 
 import request
+
 from credentials import CredentialMac
 
 a = importlib_resources.files("templates")
-print(a.name)
 
 ENV = jinja2.Environment(
     loader=jinja2.FileSystemLoader(importlib_resources.files("templates")._paths[0])

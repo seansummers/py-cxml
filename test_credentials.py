@@ -21,7 +21,7 @@ class TestCredentialMac(unittest.TestCase):
             creationDate=datetime.datetime(2003, 1, 15, 8, 42, 46, tzinfo=TestTZInfo()),
             expirationDate=datetime.datetime(2003, 1, 15, 11, 42, 46, tzinfo=TestTZInfo()),
         )
-        self.assertEqual(credential_mac.mac("password"), "5KMM/p4KtK5oAf/B")
+        self.assertEqual(credential_mac.mac(), "cR6Jpz58nriXERDN")
 
     def test_mac_password(self):
         credential_mac = CredentialMac(
